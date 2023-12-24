@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 public class Main {
@@ -17,6 +19,61 @@ public class Main {
 
         Dictionary<Integer, String> translationMap = parseDictionary("./src/dictionary.txt");
         System.out.println("Dictionary lookup:\t" + translationMap);
+
+        String translatedString = translate(lastElems, translationMap);
+        System.out.println("Translated String:\t" + translatedString);
+
+        printToOutput(translatedString, "output.txt");
+    }
+
+    /**
+     * Prints the contents of the given String to a text file.
+     * @param s the String to append into the output file
+     * @param outputFilename the filename to give to the output file
+     */
+    public static void printToOutput(String s, String outputFilename){
+        String outputNameCorrected = "./out/" + outputFilename;
+        File f = new File(outputNameCorrected);
+        try {
+            FileWriter fw = new FileWriter(f);
+            fw.append(s);
+            fw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Uses a Dictionary to convert the set of Integer keys into a set of Strings.
+     * @param keys the list of Integers to convert from
+     * @param dict the Integer-String pairings of the cipher
+     * @return a String representation of the translated ArrayList
+     */
+    public static String translate(ArrayList<Integer> keys, Dictionary<Integer, String> dict){
+        if(keys.isEmpty() || dict.isEmpty()){
+            throw new RuntimeException("One or more of the inputs are empty!");
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        Iterator<Integer> iter = keys.iterator();
+
+        while(iter.hasNext()) {
+            int currInt = iter.next();
+            String currString = dict.get(currInt);
+
+            if(currString == null){
+                throw new RuntimeException("One of the given Integers does not have a dictionary value. Exiting now.");
+            }
+
+            sb.append(currString);
+
+            if(iter.hasNext()) {
+                sb.append(" ");
+            }
+        }
+
+        return sb.toString();
     }
 
     /**
@@ -25,6 +82,10 @@ public class Main {
      * @return the ArrayList, represented as a series of increasing arrays
      */
     public static ArrayList<ArrayList<Integer>> toStaircase(ArrayList<Integer> arr){
+        if(arr.isEmpty()){
+            throw new RuntimeException("The input array is empty!");
+        }
+
         Iterator<Integer> iter = arr.iterator();
 
         ArrayList<ArrayList<Integer>> output = new ArrayList<>();
@@ -55,6 +116,10 @@ public class Main {
      * @return a list of the last elements of each subarray
      */
     public static <T> ArrayList<T> getLastElementsAsArr(ArrayList<ArrayList<T>> arr){
+        if(arr.isEmpty()){
+            throw new RuntimeException("The input array is empty!");
+        }
+
         ArrayList<T> output = new ArrayList<>();
         for (ArrayList<T> currArr : arr) {
             T lastElem = getLastElement(currArr);
@@ -70,6 +135,9 @@ public class Main {
      * @param <T> the data type of the ArrayList
      */
     public static <T> T getLastElement(ArrayList<T> arr){
+        if(arr.isEmpty()){
+            throw new RuntimeException("The input array is empty!");
+        }
         return arr.get(arr.size() - 1);
     }
 
@@ -138,6 +206,10 @@ public class Main {
      * @return whether it contains an integer
      */
     public static boolean containsInt(String s){
+        if(s.isEmpty()){
+            throw new RuntimeException("The given string is empty!");
+        }
+
         for(int i = 0; i < s.length(); i++){
             char curr = s.charAt(i);
 
