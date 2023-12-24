@@ -14,6 +14,9 @@ public class Main {
 
         ArrayList<Integer> lastElems = getLastElementsAsArr(staircaseArr);
         System.out.println("Only the last elements:\t" + lastElems);
+
+        Dictionary<Integer, String> translationMap = parseDictionary("./src/dictionary.txt");
+        System.out.println("Dictionary lookup:\t" + translationMap);
     }
 
     /**
@@ -71,15 +74,46 @@ public class Main {
     }
 
     /**
+     * Scans the given filepath for Integer-String pairs and returns them as a Dictionary.
+     * @param filepath the filepath to evaluate
+     * @return a dictionary containing the Integer-String pairs.
+     */
+    public static Dictionary<Integer, String> parseDictionary(String filepath){
+        Dictionary<Integer, String> output = new Hashtable<>();
+
+        try{
+            File f = new File(filepath);
+            Scanner s = new Scanner(f);
+
+            while(s.hasNext()){
+                int currVal = s.nextInt();
+                String currString = s.next();
+
+                output.put(currVal, currString);
+            }
+        } catch(FileNotFoundException fileNotFoundException){
+            fileNotFoundException.printStackTrace(System.out);
+            System.exit(-1);
+        }
+
+        return output;
+    }
+
+    /**
      * Scans the given filepath for integers and returns them as an array.
      */
     public static ArrayList<Integer> parseInt(String filepath){
         ArrayList<Integer> output = new ArrayList<>();
 
         try {
+            /* Open the file for reading. */
             File f = new File(filepath);
             Scanner s = new Scanner(f);
 
+            /* As long as there are still tokens in the file,
+            * check if they are of the correct data type,
+            * and append them to the output.
+            **/
             while (s.hasNext()){
                 String curr = s.next();
 
