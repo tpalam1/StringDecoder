@@ -6,24 +6,39 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        ArrayList<Integer> arr = parseInt("./src/dictionary.txt");
+        String translatedString = decode("input.txt");
+        printToFile(translatedString, "output.txt");
+    }
+
+    /**
+     * Decodes the input file by sorting its keys in ascending order,
+     * and only returning the String values of the keys that are staircase numbers.
+     * A staircase number is an integer in the sequence of sum(0, n, i);
+     * here are the first few staircase numbers: {1, 3, 6, 10, 15, ...}
+     *
+     * @param message_file the dictionary file to parse; it must have Integer-String pairings.
+     * @return a decoded version of the dictionary file, subject to the rules above.
+     */
+    public static String decode(String message_file){
+        /* Denotes the filepath to the input file. */
+        String filepath = "./src/" + message_file;
+
+        ArrayList<Integer> arr = parseInt(filepath);
         Collections.sort(arr);
 
-        System.out.println("Sorted, parsed integers:\t" + arr);
+        // System.out.println("Sorted, parsed integers:\t" + arr);
 
         ArrayList<ArrayList<Integer>> staircaseArr = toStaircase(arr);
-        System.out.println("As a staircase:\t" + staircaseArr);
+        // System.out.println("As a staircase:\t" + staircaseArr);
 
         ArrayList<Integer> lastElems = getLastElementsAsArr(staircaseArr);
-        System.out.println("Only the last elements:\t" + lastElems);
+        // System.out.println("Only the last elements:\t" + lastElems);
 
         Dictionary<Integer, String> translationMap = parseDictionary("./src/dictionary.txt");
-        System.out.println("Dictionary lookup:\t" + translationMap);
+        // System.out.println("Dictionary lookup:\t" + translationMap);
 
-        String translatedString = translate(lastElems, translationMap);
-        System.out.println("Translated String:\t" + translatedString);
+        return translate(lastElems, translationMap);
 
-        printToOutput(translatedString, "output.txt");
     }
 
     /**
@@ -31,7 +46,7 @@ public class Main {
      * @param s the String to append into the output file
      * @param outputFilename the filename to give to the output file
      */
-    public static void printToOutput(String s, String outputFilename){
+    public static void printToFile(String s, String outputFilename){
         String outputNameCorrected = "./out/" + outputFilename;
         File f = new File(outputNameCorrected);
         try {
